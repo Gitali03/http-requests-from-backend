@@ -1,11 +1,18 @@
 import fs from 'node:fs/promises';
-
+import path from 'node:path';
+import { fileURLToPath } from 'url';
 import bodyParser from 'body-parser';
 import express from 'express';
 
 const app = express();
 
-app.use(express.static('images'));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+//app.use(express.static('images'));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 app.use(bodyParser.json());
 
 // CORS
@@ -50,4 +57,9 @@ app.use((req, res, next) => {
   res.status(404).json({ message: '404 - Not Found' });
 });
 
-app.listen(3000);
+app.listen(3000, () => {
+  console.log('Server is running on http://localhost:3000');
+});
+
+
+//app.listen(3000);
